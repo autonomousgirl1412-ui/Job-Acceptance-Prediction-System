@@ -4,24 +4,19 @@ An end-to-end **Machine Learning & HR Analytics** solution designed to predict c
 
 
 
-##  Problem Statement & Business Objectives
-Recruitment and placement teams evaluate thousands of candidates across academic, technical, experiential, and compensation metrics, yet many eligible candidates reject final offers. Using a dataset of **51,500 candidate records** (50,000 unique records post-cleaning), this project addresses the following goals:
-* **Predict Offer Acceptance:** Classify whether a candidate will accept (`Placed` = 1) or reject (`Not Placed` = 0) a job offer.
-* **Identify Key Drivers:** Uncover which technical, experiential, and compensation factors most strongly influence acceptance decisions.
-* **Reduce Offer Dropouts:** Flag high-risk candidates early so HR teams can optimize compensation offers, role alignment, and interview strategies.
-
-
+##  Problem Statement 
+Recruitment and placement teams evaluate thousands of candidates across academic, technical, experiential, and compensation metrics, yet many eligible candidates reject final offers. Us
 
 ##  Repository Structure
 ```text
 Job-Acceptance-Prediction-System/
 ├── HR_Job_Placement_Dataset.csv      # Raw dataset (51,500 rows, 26 columns)
-├── 01_cleaned_hr_data.csv            # Cleaned & deduplicated dataset (50,000 rows, 26 columns)
-├── 02_featured_hr_data.csv           # Feature-engineered dataset (50,000 rows, 35 columns)
-├── data_cleaning.ipynb               # Data auditing, string standardization, deduplication & imputation
-├── eda_and_features.ipynb            # Exploratory Data Analysis (EDA), analyst tasks & feature engineering
-├── ml_modeling.ipynb                 # Preprocessing pipeline, model comparison & feature importance
-├── best_job_acceptance_model.pkl     # Serialized Gradient Boosting classification pipeline
+├── cleaned_hr_data.csv            # Cleaned & deduplicated dataset (50,000 rows, 26 columns)
+├── featured_hr_data.csv           # Feature-engineered dataset (50,000 rows, 35 columns)
+├── 1_data_cleaning.ipynb               # Data auditing, string standardization, deduplication & imputation
+├── 2_eda_and_features.ipynb            # Exploratory Data Analysis (EDA), analyst tasks & feature engineering
+├── 3_ml_modeling.ipynb                 # Preprocessing pipeline, model comparison & feature importance
+├── job_acceptance_model.pkl     # Serialized Gradient Boosting classification pipeline
 ├── app.py                            # Interactive Streamlit analytics dashboard & live predictor
 └── README.md                         # Project documentation, insights & setup guide
 ```
@@ -30,12 +25,12 @@ Job-Acceptance-Prediction-System/
 
 ##  End-to-End Methodology
 
-### 1. Data Cleaning & Preprocessing (`data_cleaning.ipynb`)
+### 1. Data Cleaning & Preprocessing (`1_data_cleaning.ipynb`)
 * **String Standardization:** Stripped leading/trailing whitespace and normalized casing across categorical fields (`gender`, `company_tier`, `internship_experience`) prior to deduplication.
 * **Deduplication:** Identified and removed **1,500 exact duplicate rows**, resulting in **50,000 unique candidate records**.
 * **Domain-Aware Imputation:** Enforced logical consistency for freshers (`years_of_experience == 0` defaulted to `0` notice period/employment gap and `'No'` layoff history), followed by median imputation for remaining numerical nulls and mode imputation for categorical nulls.
 
-### 2. Feature Engineering & EDA (`eda_and_features.ipynb`)
+### 2. Feature Engineering & EDA (`2_eda_and_features.ipynb`)
 * **Derived Features:**
   * `experience_category`: Categorized into *Fresher* (0 yrs), *Junior* (1–2 yrs), and *Senior* (3+ yrs).
   * `academic_band`: Composite average of SSC, HSC, and Degree percentages (*Average*, *Good*, *Distinction*).
@@ -58,7 +53,7 @@ Job-Acceptance-Prediction-System/
 
 ---
 
-##  Machine Learning Results (`ml_modeling.ipynb`)
+##  Machine Learning Results (`3_ml_modeling.ipynb`)
 Three classification algorithms were trained and evaluated on a stratified 80/20 train-test split (10,000 test records) using a `ColumnTransformer` (`StandardScaler` + `OneHotEncoder`) pipeline:
 
 | Model | Accuracy | Precision | Recall | F1 Score | ROC-AUC |
