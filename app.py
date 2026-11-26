@@ -4,26 +4,25 @@ import numpy as np
 import plotly.express as px
 import joblib
 
-# 1. Page Configuration
+
 st.set_page_config(
     page_title="Job Acceptance Prediction System",
     page_icon="🎯",
     layout="wide"
 )
 
-# 2. Load Data & Model (Cached for fast performance)
+
 @st.cache_data
 def load_data():
-    return pd.read_csv('02_featured_hr_data.csv')
+    return pd.read_csv('featured_hr_data.csv')
 
 @st.cache_resource
 def load_model():
-    return joblib.load('best_job_acceptance_model.pkl')
+    return joblib.load('job_acceptance_model.pkl')
 
 df = load_data()
 model = load_model()
 
-# 3. Sidebar Filters
 st.sidebar.header("🔍 Filter Candidate Data")
 selected_tier = st.sidebar.multiselect(
     "Company Tier",
@@ -47,15 +46,14 @@ filtered_df = df[
     (df['competition_level'].isin(selected_comp))
 ]
 
-# 4. Title & Executive Summary
+
 st.title("🎯 HR Analytics: Job Acceptance Prediction System")
 st.markdown("Analyze recruitment patterns, monitor offer dropout risks, and predict candidate acceptance probability using **Gradient Boosting (90.5% Accuracy | 0.967 ROC-AUC)**.")
 
-# 5. Required 7 Key KPIs Banner
 st.subheader("📊 Key Recruitment & Acceptance KPIs")
 
 total_candidates = len(filtered_df)
-# Eligible/qualified candidates proxy (e.g., skills match >= 60% & interview >= 60) vs overall acceptance
+
 placement_rate = filtered_df['target_accepted'].mean() * 100 if total_candidates > 0 else 0
 job_acceptance_rate = placement_rate
 offer_dropout_rate = 100 - job_acceptance_rate if total_candidates > 0 else 0
@@ -76,7 +74,7 @@ kpi7.metric("High-Risk Candidate %", f"{high_risk_pct:.2f}%")
 
 st.divider()
 
-# 6. Interactive Tabs: Analytics Dashboard vs Live ML Predictor
+
 tab1, tab2 = st.tabs(["📈 Recruitment & Acceptance Analytics", "🤖 Live Offer Acceptance Predictor"])
 
 with tab1:
@@ -164,7 +162,7 @@ with tab2:
         submitted = st.form_submit_button("🔮 Predict Acceptance Probability")
 
     if submitted:
-        # Compute engineered features identically to training pipeline
+        
         exp_cat = 'Fresher' if years_of_experience == 0 else ('Junior' if years_of_experience <= 2 else 'Senior')
         avg_acad = np.mean([ssc_percentage, hsc_percentage, degree_percentage])
         acad_band = 'Average' if avg_acad <= 65 else ('Good' if avg_acad <= 75 else 'Distinction')
